@@ -19,6 +19,7 @@ X_df = pd.DataFrame(X, columns=['X1', 'X2'])
 y_s = pd.Series(y, dtype='category')
 
 #Q2)A
+print(" 2)A")
 from sklearn.model_selection import train_test_split
 
 X_train, X_test, y_train, y_test = train_test_split(X_df, y_s, test_size=0.3, random_state=42)
@@ -29,11 +30,21 @@ y_pred = tree.predict(X_test)
 print("Accuracy:", accuracy(y_pred, y_test))
 
 for cls in y_test.unique():
-    print("Class",cls," Precision:", precision(y_pred, y_test, cls))
-    print("Class",cls," Recall:", recall(y_pred, y_test, cls))
+    p = precision(y_pred, y_test, cls)
+    r = recall(y_pred, y_test, cls)
+
+    if p + r == 0:
+        f1 = 0
+    else:
+        f1 = 2 * p * r / (p + r)
+
+    print(f"Class {cls}")
+    print("Precision:", p)
+    print("Recall:", r)
+    print("F1 Score:", f1)
 
 #Q2)B
-
+print(" 2)B")
 k = 5
 n = len(X_df)
 dum = n // k
@@ -73,4 +84,4 @@ for i in range(k):
     print(f"Best depth for fold {i+1}: {best_depth}")
     print(f"Accuracy using depth {best_depth} for fold {i+1}: {acc}")
 print("Overall best depth of model:",max(depth_list,key = depth_list.count))
-print("Mean accuray:",sum(acc_list)/k)
+print("Mean accuracy:",sum(acc_list)/k)
